@@ -1,13 +1,15 @@
 #!/usr/bin/env python
 # -*- coding: UTF-8 -*-
 
+#'BACKEND': 'redis_cache.RedisCache',
+#'LOCATION': '127.0.0.1:6379',
+#'OPTIONS': {
+#    'DB': 1,
+#},
+
 _cache = {
     'debug': {
-        'BACKEND': 'redis_cache.RedisCache',
-        'LOCATION': '127.0.0.1:6379',
-        'OPTIONS': {
-            'DB': 1,
-        },
+        'BACKEND': 'django.core.cache.backends.dummy.DummyCache',
     },
     'test': {
         #'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
