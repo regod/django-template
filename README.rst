@@ -1,4 +1,4 @@
 django-template
 ===============
 
-my django template for startproject/startapp
+1my django template for startproject/startapp
