@@ -17,13 +17,14 @@ else:
     DEBUG = False
 TEMPLATE_DEBUG = DEBUG
 
-if DEBUG:
+if os.path.isfile(os.path.join(DJANGO_ROOT, 'debug.env')):
     ENV = 'debug'
+elif os.path.isfile(os.path.join(DJANGO_ROOT, 'test.env')):
+    ENV = 'test'
+elif os.path.isfile(os.path.join(DJANGO_ROOT, 'prepub.env')):
+    ENV = 'prepub'
 else:
-    if os.path.isfile(os.path.join(DJANGO_ROOT, 'test.env')):
-        ENV = 'test'
-    else:
-        ENV = 'product'
+    ENV = 'product'
 
 ADMINS = (
     # ('Your Name', 'your_email@example.com'),
@@ -92,6 +93,7 @@ STATICFILES_DIRS = (
     # Put strings here, like "/home/html/static" or "C:/www/django/static".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
+    DJANGO_ROOT + '/static',
 )
 
 # List of finder classes that know how to find static files in
@@ -131,6 +133,7 @@ TEMPLATE_DIRS = (
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
+    DJANGO_ROOT + '/templates',
 )
 
 INSTALLED_APPS = (
@@ -145,10 +148,10 @@ INSTALLED_APPS = (
     # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',
 )
+
 if DEBUG:
     INSTALLED_APPS += ('django_extensions',)
 
-if DEBUG:
     INTERNAL_IPS = ('127.0.0.1',)
     MIDDLEWARE_CLASSES += (
         'debug_toolbar.middleware.DebugToolbarMiddleware',
@@ -181,6 +184,7 @@ if DEBUG:
 # the site admins on every HTTP 500 error when DEBUG=False.
 # See http://docs.djangoproject.com/en/dev/topics/logging for
 # more details on how to customize your logging configuration.
-from log import _logging
-LOGGING = _logging
+if DEBUG:
+    from log import _logging
+    LOGGING = _logging
 
