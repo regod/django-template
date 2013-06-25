@@ -126,6 +126,10 @@ MIDDLEWARE_CLASSES = (
     # Uncomment the next line for simple clickjacking protection:
     # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
+# for johnny-cache
+JOHNNY_MIDDLEWARE_KEY_PREFIX='jc_{{ project_name }}'
+MAN_IN_BLACKLIST = ('django_admin_log', 'django_content_type',
+        'django_session', 'django_site')
 
 ROOT_URLCONF = 'config.urls'
 
@@ -190,4 +194,6 @@ if DEBUG:
 if DEBUG:
     from log import _logging
     LOGGING = _logging
+
+LOGIN_URL = '/account/login/'
 
