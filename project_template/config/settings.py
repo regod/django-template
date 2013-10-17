@@ -3,7 +3,6 @@
 # Django settings for {{ project_name }} project.
 
 import os
-import variable as v
 
 DJANGO_ROOT = os.path.dirname(os.path.dirname(__file__))
 if not os.path.isdir(os.path.join(DJANGO_ROOT, 'logs')):
@@ -26,21 +25,17 @@ elif os.path.isfile(os.path.join(DJANGO_ROOT, 'prepub.env')):
 else:
     ENV = 'product'
 
+extra_settings = __import__('extra_settings_%s' % (ENV), globals(), locals())
+
 ADMINS = (
     # ('Your Name', 'your_email@example.com'),
 )
 
 MANAGERS = ADMINS
 
-from database import _database
-DATABASES = {
-    'default': _database[ENV]
-}
+DATABASES = extra_settings.DATABASES
 
-from caches import _cache
-CACHES = {
-    'default': _cache[ENV],
-}
+CACHES = extra_settings.CACHES
 
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
@@ -70,22 +65,22 @@ USE_TZ = True
 
 # Absolute filesystem path to the directory that will hold user-uploaded files.
 # Example: "/home/media/media.lawrence.com/media/"
-MEDIA_ROOT = v._media_root[ENV]
+MEDIA_ROOT = extra_settings.MEDIA_ROOT
 
 # URL that handles the media served from MEDIA_ROOT. Make sure to use a
 # trailing slash.
 # Examples: "http://media.lawrence.com/media/", "http://example.com/media/"
-MEDIA_URL = v._media_url[ENV]
+MEDIA_URL = extra_settings.MEDIA_URL
 
 # Absolute path to the directory static files should be collected to.
 # Don't put anything in this directory yourself; store your static files
 # in apps' "static/" subdirectories and in STATICFILES_DIRS.
 # Example: "/home/media/media.lawrence.com/static/"
-STATIC_ROOT = v._static_root[ENV]
+STATIC_ROOT = extra_settings.STATIC_ROOT
 
 # URL prefix for static files.
 # Example: "http://media.lawrence.com/static/"
-STATIC_URL = v._static_url[ENV]
+STATIC_URL = extra_settings.STATIC_URL
 
 # Additional locations of static files
 STATICFILES_DIRS = (
@@ -141,6 +136,7 @@ MIDDLEWARE_CLASSES = (
 JOHNNY_MIDDLEWARE_KEY_PREFIX='jc_{{ project_name }}'
 MAN_IN_BLACKLIST = ('django_admin_log', 'django_content_type',
         'django_session', 'django_site')
+JOHNNY_MIDDLEWARE_SECONDS = 86400 # 3600 x 24
 
 ROOT_URLCONF = 'config.urls'
 
